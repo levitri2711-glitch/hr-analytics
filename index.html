@@ -2,7 +2,9 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1417" media="(prefers-color-scheme: dark)">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'self'; form-action 'self' https://script.google.com">
 <title>HR Talent Studio</title>
@@ -11,27 +13,35 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="ta.css">
+<link rel="stylesheet" href="ui.css">
 </head>
 <body>
 <div id="gate" hidden></div>
 <div id="legal" hidden></div>
+<a class="skip" href="#view">Bỏ qua menu</a>
 <div class="app">
-  <aside class="side">
-    <div class="brand"><div class="mark">AMG</div><div><b>HR Talent Studio</b><small>AMG Việt Nam · dữ liệu mô phỏng</small></div></div>
+  <aside class="side" id="side" aria-label="Điều hướng">
+    <div class="brand"><div class="mark">AMG</div><div><b>HR Talent Studio</b><small>Dữ liệu mô phỏng</small></div><button class="iconbtn only-m" data-act="navClose" aria-label="Đóng menu"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <nav id="nav" aria-label="Mô-đun"></nav>
-    <div class="foot">Tập đoàn giả định <b>Aurora Meridian Group Việt Nam</b>. Mọi nhân viên, ứng viên là dữ liệu mô phỏng. Tham số pháp lý cần đối chiếu văn bản gốc. <a href="#/legal/privacy">Bảo mật</a> · <a href="#/legal/terms">Điều khoản</a></div>
+    <div class="foot"><a href="#/legal/privacy">Bảo mật</a> · <a href="#/legal/terms">Điều khoản</a> · <a href="#/legal/disclaimer">Miễn trừ</a></div>
   </aside>
+  <div class="scrim" data-act="navClose"></div>
   <main>
-    <div class="top">
+    <header class="top">
+      <button class="iconbtn only-m" data-act="navOpen" aria-label="Mở menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <button class="iconbtn only-d" data-act="focusMode" aria-label="Thu gọn menu (chế độ tập trung)" title="Chế độ tập trung"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M9 4.5v15"/></svg></button>
       <h1 id="vtitle"><span class="crumb">AMG Việt Nam</span>Tổng quan</h1>
-      <span class="chip" id="clock">—</span>
+      <button class="search" data-act="cmdk" aria-label="Tìm mô-đun"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><span>Tìm mô-đun…</span><kbd>Ctrl K</kbd></button>
+      <span class="chip hide-m" id="clock">—</span>
       <span class="chip" id="sync"><span class="dot"></span>Đang kết nối</span>
-      <span class="chip" id="who">Khách</span>
-    </div>
+      <span class="who" id="who">Khách</span>
+    </header>
     <div id="banner"></div>
-    <div id="view"></div>
+    <div id="view" tabindex="-1"></div>
   </main>
 </div>
+<nav class="tabbar" id="tabbar" aria-label="Lối tắt"></nav>
+<div id="cmdk" class="cmdk" hidden><div class="cmdk-bg" data-act="cmdkClose"></div><div class="cmdk-box" role="dialog" aria-modal="true" aria-label="Tìm mô-đun"><input id="cmdkIn" placeholder="Nhập tên mô-đun, ví dụ: lương, phỏng vấn, offer…" autocomplete="off"><div id="cmdkList" role="listbox"></div></div></div>
 <div id="drawerWrap" hidden><div class="drawer-bg" data-act="close"></div><aside class="drawer" id="drawer" role="dialog" aria-modal="true"></aside></div>
 <div class="toast" id="toast" hidden></div>
 <script src="config.js"></script>

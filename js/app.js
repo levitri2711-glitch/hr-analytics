@@ -83,11 +83,41 @@ window.addEventListener('hashchange',()=>{const h=location.hash;if(h.startsWith(
 
 /* ---------- ghi đè các phần phụ thuộc runtime cũ ---------- */
 banner=function(){const b=$('#banner');if(DEMO)b.innerHTML=`<div class="banner warn">Bản demo: dữ liệu mô phỏng, thay đổi chỉ tồn tại trong phiên này. <a href="#" data-act="logout">Đăng nhập</a> để lưu và cộng tác.</div>`;else if(!S.canWrite)b.innerHTML=`<div class="banner">Bạn đang ở chế độ ${can('commenter')?'xem và bình luận':'chỉ xem'}. Liên hệ Editor/Owner để được cấp thêm quyền.</div>`;else b.innerHTML=''};
-const GROUPS=[['Nhân sự (HR Analytics)',v=>!v.startsWith('ta_')&&v!=='access'],['Tuyển dụng (Talent Acquisition)',v=>v.startsWith('ta_')],['Hệ thống',v=>v==='access']];
+/* ---------- điều hướng: 2 không gian làm việc, nhóm theo quy trình ---------- */
+const WS=[
+ {id:'hr',label:'Nhân sự',home:'overview',groups:[['',['overview']],['Con người',['people','lifecycle','recruit','time','training','kpi','relations']],['Lương & chi phí',['payroll','cost']],['Tuân thủ',['compliance','policy','docs','library']],['Vận hành',['automation']]],
+  tabs:[['overview','Tổng quan','home'],['people','Nhân sự','users'],['payroll','Lương','wallet'],['compliance','Tuân thủ','shield']]},
+ {id:'ta',label:'Tuyển dụng',home:'ta_dash',groups:[['',['ta_dash']],['Hoạch định',['ta_plan','ta_jd','ta_comp']],['Thu hút',['ta_brand','ta_social']],['Tuyển chọn',['ta_ats','ta_screen','ta_test','ta_interview','ta_decide']],['Tiếp nhận',['ta_offer','ta_onboard']],['Vận hành',['ta_legal','ta_auto','ta_kit']]],
+  tabs:[['ta_dash','Tổng quan','home'],['ta_ats','Pipeline','users'],['ta_interview','Phỏng vấn','chat'],['ta_offer','Offer','doc']]}];
+const ICON={home:'<path d="M4 11l8-6 8 6v8a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 4.5a3.5 3.5 0 010 7M21 20c0-2.6-1.6-4.8-4-5.6"/>',wallet:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14.5h2"/>',shield:'<path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',chat:'<path d="M5 5h14a1 1 0 011 1v9a1 1 0 01-1 1h-8l-4 3v-3H5a1 1 0 01-1-1V6a1 1 0 011-1z"/>',doc:'<path d="M7 3h7l5 5v12a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',menu:'<path d="M4 7h16M4 12h16M4 17h16"/>'};
+const ico=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[k]}</svg>`;
+const wsOf=v=>v==='access'?(S.ws||'hr'):v.startsWith('ta_')?'ta':'hr';
+const vLabel=id=>(VIEWS.find(x=>x[0]===id)||[,id])[1];
 const _render=render;
-render=function(){_render();const cur=S.view;const nav=$('#nav');const btn=new Map([...nav.querySelectorAll('button[data-v]')].map(b=>[b.dataset.v,b.outerHTML]));
-  nav.innerHTML=GROUPS.map(([l,f])=>`<div class="ngrp">${l}</div>`+VIEWS.filter(([id])=>f(id)).map(([id])=>btn.get(id)||'').join('')).join('');
-  if(cur.startsWith('ta_')){const c=$('#vtitle .crumb');if(c)c.textContent='AMG Việt Nam · Talent Acquisition'}};
+render=function(){_render();const cur=S.view;const ws=wsOf(cur);S.ws=ws;const W=WS.find(w=>w.id===ws);const nav=$('#nav');
+  const btn=new Map([...nav.querySelectorAll('button[data-v]')].map(b=>[b.dataset.v,b.outerHTML]));
+  nav.innerHTML=`<div class="ws" role="tablist" aria-label="Không gian làm việc">${WS.map(w=>`<button role="tab" aria-selected="${w.id===ws}" data-act="ws" data-w="${w.id}">${w.label}</button>`).join('')}</div>`+
+    W.groups.map(([l,ids])=>(l?`<div class="ngrp">${l}</div>`:'')+ids.map(id=>btn.get(id)||'').join('')).join('')+`<div class="ngrp">Hệ thống</div>`+(btn.get('access')||'');
+  const c=$('#vtitle .crumb');if(c)c.textContent=(ws==='ta'?'Tuyển dụng':'Nhân sự')+(cur==='access'?' · Hệ thống':'');
+  document.title=vLabel(cur)+' · HR Talent Studio';
+  $('#tabbar').innerHTML=W.tabs.map(([id,l,i])=>`<button data-act="go" data-v="${id}"${id===cur?' aria-current="page"':''}>${ico(i)}<span>${l}</span></button>`).join('')+`<button data-act="navOpen">${ico('menu')}<span>Menu</span></button>`;
+};
+function setNav(open){document.body.classList.toggle('nav-open',open);if(open){const f=$('#nav [aria-current="page"]')||$('#nav button');if(f)f.focus()}}
+let cmdIdx=0;
+function cmdItems(q){const n=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/gi,'d').toLowerCase();q=n(q.trim());
+  return VIEWS.map(([id,l])=>({id,l,g:id==='access'?'Hệ thống':id.startsWith('ta_')?'Tuyển dụng':'Nhân sự'})).filter(x=>!q||n(x.l+' '+x.g).includes(q))}
+function cmdDraw(){const list=cmdItems($('#cmdkIn').value);cmdIdx=Math.min(cmdIdx,Math.max(0,list.length-1));
+  $('#cmdkList').innerHTML=list.map((x,i)=>`<button role="option" data-act="cmdGo" data-v="${x.id}" aria-selected="${i===cmdIdx}"><span>${esc(x.l)}</span><small>${x.g}</small></button>`).join('')||'<div class="empty">Không tìm thấy mô-đun phù hợp.</div>'}
+function cmdOpen(){const d=$('#cmdk');d.hidden=false;const i=$('#cmdkIn');i.value='';cmdIdx=0;cmdDraw();setTimeout(()=>i.focus(),0)}
+function cmdClose(){$('#cmdk').hidden=true}
+document.addEventListener('input',ev=>{if(ev.target.id==='cmdkIn'){cmdIdx=0;cmdDraw()}});
+document.addEventListener('keydown',ev=>{
+  if((ev.metaKey||ev.ctrlKey)&&ev.key.toLowerCase()==='k'){ev.preventDefault();$('#cmdk').hidden?cmdOpen():cmdClose();return}
+  if(!$('#cmdk').hidden){const list=cmdItems($('#cmdkIn').value);
+    if(ev.key==='Escape'){cmdClose()}else if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){ev.preventDefault();cmdIdx=(cmdIdx+(ev.key==='ArrowDown'?1:-1)+list.length)%Math.max(1,list.length);cmdDraw();const s=$('#cmdkList [aria-selected="true"]');if(s)s.scrollIntoView({block:'nearest'})}else if(ev.key==='Enter'&&list[cmdIdx]){ev.preventDefault();cmdClose();go(list[cmdIdx].id)}return}
+  if(ev.key==='Escape'&&document.body.classList.contains('nav-open'))setNav(false);
+  if(ev.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!document.activeElement.isContentEditable){ev.preventDefault();cmdOpen()}});
+if(LS.get('hts.focus',false))document.body.classList.add('focus');
 V.access=()=>{
   const role=ME?ME.user.role:'demo';
   const mx=[['Xem dashboard, báo cáo, hồ sơ mô phỏng','yes','yes','yes','yes'],['Bình luận vào từng khối','no','yes','yes','yes'],['Sửa dữ liệu: nhân sự, ứng viên, JD, phiếu chấm, offer','no','no','yes','yes'],['Chạy tự động hoá, đồng bộ Google Sheets','no','no','yes','yes'],['Áp dụng / hoàn tác chính sách & quy định','no','no','no','yes'],['Mời người dùng, đổi quyền','no','no','no','yes*']];
@@ -103,6 +133,10 @@ async function loadUsers(){const box=document.getElementById('usrBox');if(!box)r
   tbl(['Email','Quyền','Trạng thái','Người duyệt',''],r.users.map(u=>`<tr><td>${esc(u.email)}</td><td>${u.role==='owner'?'Owner':`<select data-email="${esc(u.email)}" class="roleSel">${opt(u)}</select>`}</td><td>${u.status==='active'?pill('Hoạt động','ok'):pill('Đã thu hồi','mute')}</td><td class="small">${esc(u.approved_by||'')}</td><td>${u.role!=='owner'&&u.status==='active'?`<button class="btn sm ghost" data-act="usrRevoke" data-email="${esc(u.email)}">Thu hồi</button>`:''}</td></tr>`))}catch(e){box.textContent=e.message}}
 document.addEventListener('change',async ev=>{const el=ev.target;if(!el.classList||!el.classList.contains('roleSel'))return;try{await API.call('setRole',{email:el.dataset.email,role:el.value});toast('Đã đổi quyền')}catch(e){toast(e.message)}loadUsers()});
 Object.assign(ACT,{
+ ws:b=>{const w=WS.find(x=>x.id===b.dataset.w);if(!w||w.id===S.ws)return;const open=document.body.classList.contains('nav-open');go(w.home);if(open)setNav(true)},
+ navOpen:()=>setNav(true),navClose:()=>setNav(false),
+ focusMode:()=>{const on=!document.body.classList.contains('focus');document.body.classList.toggle('focus',on);LS.set('hts.focus',on)},
+ cmdk:cmdOpen,cmdkClose:cmdClose,cmdGo:b=>{cmdClose();go(b.dataset.v)},
  logout:()=>{API.logout();location.hash='';location.reload()},
  cmAdd:async b=>{const t=val('cm_text').trim();if(!t)return;try{await API.call('addComment',{target:b.dataset.t,text:t});openComments(b.dataset.t)}catch(e){toast(e.message)}},
  cmResolve:async b=>{try{await API.call('resolveComment',{comment_id:b.dataset.id});openComments(b.dataset.t)}catch(e){toast(e.message)}},
@@ -115,7 +149,7 @@ Object.assign(ACT,{
  prSend:async()=>{try{await API.call('privacyRequest',{kind:val('pr_kind'),note:val('pr_note')});toast('Đã gửi yêu cầu tới Owner. Phản hồi trong tối đa 30 ngày.')}catch(e){toast(e.message)}},
  audLoad:async()=>{try{const l=await API.call('auditLog',{limit:200});document.getElementById('audBox').innerHTML=tbl(['Thời điểm','Người','Hành động','Đối tượng'],l.map(a=>`<tr><td>${new Date(a.at).toLocaleString('vi-VN')}</td><td>${esc(a.actor)}</td><td>${esc(a.action)}</td><td class="small">${esc(a.target)}</td></tr>`))}catch(e){toast(e.message)}},
 });
-const _go=go;go=function(v){_go(v);if(v==='access'&&!DEMO&&can('editor'))setTimeout(loadUsers,0)};
+const _go=go;go=function(v){setNav(false);_go(v);const m=document.getElementById('view');if(m&&matchMedia('(max-width:960px)').matches)m.focus({preventScroll:true});if(v==='access'&&!DEMO&&can('editor'))setTimeout(loadUsers,0)};
 
 /* ---------- khởi động ---------- */
 function startApp(){
@@ -124,7 +158,7 @@ function startApp(){
   const h0=location.hash.slice(1);if(V[h0])S.view=h0;
   render();tick();setInterval(tick,30000);
   connect().then(()=>{if(!S.downloads)S.downloads=DL;if(!S.sample)S.sample=SAMPLE;
-    const w=$('#who');if(w)w.innerHTML=(DEMO?'Demo':esc(ME.user.email)+' · '+esc(ME.user.role_label))+` <button class="btn sm ghost" data-act="logout">${DEMO?'Đăng nhập':'Đăng xuất'}</button>`;render()});
+    const w=$('#who');if(w){const nm=DEMO?'Demo':ME.user.email;w.innerHTML=`<button class="av" data-act="go" data-v="access" title="Tài khoản & phân quyền" aria-label="Tài khoản">${esc((nm[0]||'?').toUpperCase())}</button><span class="who-txt">${DEMO?'Bản demo':esc(ME.user.email)+' · '+esc(ME.user.role_label)}</span><button class="btn sm ghost" data-act="logout">${DEMO?'Đăng nhập':'Đăng xuất'}</button>`}render()});
 }
 (async function boot(){
   const h=location.hash;
