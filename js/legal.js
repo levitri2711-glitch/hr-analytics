@@ -1,11 +1,11 @@
 // Văn bản pháp lý (tự soạn, áp dụng cho ứng dụng học tập/mô phỏng) – nên nhờ luật sư rà soát trước khi dùng với dữ liệu thật.
 (function () {
-  const OWNER = 'Quản trị viên HR Talent Studio (cá nhân vận hành, phi thương mại)';
+  const OWNER = 'Quản trị viên HR Analytics (cá nhân vận hành, phi thương mại)';
   const CONTACT = 'email của Owner ghi trong thư mời';
   const UPDATED = '16/11/2026';
   const PAGES = {
     privacy: ['Chính sách bảo mật', `
-      <h2>1. Phạm vi</h2><p>HR Talent Studio là ứng dụng mô phỏng quản trị nhân sự và tuyển dụng phục vụ học tập, đào tạo. Toàn bộ nhân viên, ứng viên, số liệu trong ứng dụng là <b>dữ liệu giả lập</b>, không phải người thật.</p>
+      <h2>1. Phạm vi</h2><p>HR Analytics là ứng dụng mô phỏng quản trị nhân sự và tuyển dụng phục vụ học tập, đào tạo. Toàn bộ nhân viên, ứng viên, số liệu trong ứng dụng là <b>dữ liệu giả lập</b>, không phải người thật.</p>
       <h2>2. Dữ liệu cá nhân chúng tôi xử lý</h2><ul>
       <li><b>Email người dùng</b>: để gửi link đăng nhập, lời mời, thông báo phân quyền. Không thu thập mật khẩu.</li>
       <li><b>Nhật ký hoạt động</b>: thời điểm đăng nhập, thay đổi dữ liệu, thay đổi quyền – để bảo mật và giải quyết khiếu nại.</li>

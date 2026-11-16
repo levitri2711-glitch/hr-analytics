@@ -1,4 +1,4 @@
-# HR Talent Studio
+# HR Analytics
 
 HR Analytics + quy trình **Talent Acquisition đầu–cuối** cho tập đoàn giả định *Aurora Meridian Group Việt Nam (AMG)*, dữ liệu mô phỏng 11/2026.
 

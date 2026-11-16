@@ -1,4 +1,4 @@
-/* HR Talent Studio – lớp giao diện tối giản (ghi đè app.css/ta.css). Một màu nhấn, nền trung tính, mật độ vừa phải. */
+/* HR Analytics – lớp giao diện tối giản (ghi đè app.css/ta.css). Một màu nhấn, nền trung tính, mật độ vừa phải. */
 :root{
   --bg:#f6f7f8;--surface:#ffffff;--surface-2:#f1f3f5;--ink:#15191e;--muted:#5d6670;--line:#e4e7eb;--line-2:#d5dae0;
   --accent:#0f6b5f;--accent-ink:#ffffff;--accent-soft:#e6f2ef;

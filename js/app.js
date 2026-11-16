@@ -63,7 +63,7 @@ async function openComments(target){
 
 /* ---------- màn hình đăng nhập & pháp lý ---------- */
 function loginView(msg){
-  document.getElementById('gate').innerHTML=`<div class="gate"><div class="gcard"><div class="brand"><div class="mark">AMG</div><div><b>HR Talent Studio</b><small>HR Analytics + Talent Acquisition · dữ liệu mô phỏng</small></div></div>
+  document.getElementById('gate').innerHTML=`<div class="gate"><div class="gcard"><div class="brand"><div class="mark">AMG</div><div><b>HR Analytics</b><small>Nhân sự &amp; Tuyển dụng · dữ liệu mô phỏng</small></div></div>
    <h1>Đăng nhập không cần mật khẩu</h1><p class="muted">Nhập email đã được mời. Hệ thống gửi link đăng nhập dùng một lần (hiệu lực 15 phút).</p>
    ${msg?`<div class="banner warn">${esc(msg)}</div>`:''}
    <form id="loginForm"><input type="email" id="lg_email" required autocomplete="email" placeholder="ten@congty.com" value="${esc(LS.get('hts.email',''))}">
@@ -99,7 +99,7 @@ render=function(){_render();const cur=S.view;const ws=wsOf(cur);S.ws=ws;const W=
   nav.innerHTML=`<div class="ws" role="tablist" aria-label="Không gian làm việc">${WS.map(w=>`<button role="tab" aria-selected="${w.id===ws}" data-act="ws" data-w="${w.id}">${w.label}</button>`).join('')}</div>`+
     W.groups.map(([l,ids])=>(l?`<div class="ngrp">${l}</div>`:'')+ids.map(id=>btn.get(id)||'').join('')).join('')+`<div class="ngrp">Hệ thống</div>`+(btn.get('access')||'');
   const c=$('#vtitle .crumb');if(c)c.textContent=(ws==='ta'?'Tuyển dụng':'Nhân sự')+(cur==='access'?' · Hệ thống':'');
-  document.title=vLabel(cur)+' · HR Talent Studio';
+  document.title=vLabel(cur)+' · HR Analytics';
   $('#tabbar').innerHTML=W.tabs.map(([id,l,i])=>`<button data-act="go" data-v="${id}"${id===cur?' aria-current="page"':''}>${ico(i)}<span>${l}</span></button>`).join('')+`<button data-act="navOpen">${ico('menu')}<span>Menu</span></button>`;
 };
 function setNav(open){document.body.classList.toggle('nav-open',open);if(open){const f=$('#nav [aria-current="page"]')||$('#nav button');if(f)f.focus()}}
