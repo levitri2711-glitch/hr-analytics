@@ -67,7 +67,7 @@ function loginView(msg){
    <h1>Đăng nhập không cần mật khẩu</h1><p class="muted">Nhập email đã được mời. Hệ thống gửi link đăng nhập dùng một lần (hiệu lực 15 phút).</p>
    ${msg?`<div class="banner warn">${esc(msg)}</div>`:''}
    <form id="loginForm"><input type="email" id="lg_email" required autocomplete="email" placeholder="ten@congty.com" value="${esc(LS.get('hts.email',''))}">
-   <label class="chk"><input type="checkbox" id="lg_ok" required> Tôi đồng ý <a href="#/legal/terms">Điều khoản sử dụng</a> và <a href="#/legal/privacy">Chính sách bảo mật</a></label>
+   <label class="chk"><input type="checkbox" id="lg_ok" required><span>Tôi đồng ý <a href="#/legal/terms">Điều khoản sử dụng</a> và <a href="#/legal/privacy">Chính sách bảo mật</a></span></label>
    <button class="btn pri" type="submit">Gửi link đăng nhập</button></form>
    <div class="or">hoặc</div><button class="btn" id="lg_demo">Xem bản demo (không lưu dữ liệu)</button>
    <p class="small muted" style="margin-top:16px">Ứng dụng chỉ dùng dịch vụ miễn phí (GitHub Pages, Google Apps Script, Google Sheets). Mọi nhân viên, ứng viên là dữ liệu mô phỏng.<br><a href="#/legal/privacy">Bảo mật</a> · <a href="#/legal/terms">Điều khoản</a> · <a href="#/legal/disclaimer">Miễn trừ</a> · <a href="#/legal/complaints">Khiếu nại</a></p></div></div>`;

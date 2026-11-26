@@ -221,3 +221,5 @@ svg .tick{font-family:var(--f-body)}
 #banner .banner+.banner{margin-top:-6px}
 .bar .fl{display:block}
 .bar .tr{display:block}
+.chk>input{margin-top:3px;flex:none}
+.gcard .chk{font-size:12.5px;color:var(--muted);line-height:1.5}
