@@ -102,6 +102,8 @@ render=function(){_render();const cur=S.view;const ws=wsOf(cur);S.ws=ws;const W=
   document.title=vLabel(cur)+' · HR Analytics';
   $('#tabbar').innerHTML=W.tabs.map(([id,l,i])=>`<button data-act="go" data-v="${id}"${id===cur?' aria-current="page"':''}>${ico(i)}<span>${l}</span></button>`).join('')+`<button data-act="navOpen">${ico('menu')}<span>Menu</span></button>`;
 };
+function tidyTables(root){(root||document).querySelectorAll('.tbl td:not(.n):not(.nw):not(.wr)').forEach(td=>{if(td.querySelector('textarea,input[type=text],select'))return;const t=td.textContent.trim();td.classList.add(t.length<=34?'nw':'wr')})}
+new MutationObserver(()=>tidyTables()).observe(document.body,{childList:true,subtree:true});
 function setNav(open){document.body.classList.toggle('nav-open',open);if(open){const f=$('#nav [aria-current="page"]')||$('#nav button');if(f)f.focus()}}
 let cmdIdx=0;
 function cmdItems(q){const n=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/gi,'d').toLowerCase();q=n(q.trim());

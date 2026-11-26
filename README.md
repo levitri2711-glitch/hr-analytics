@@ -2,7 +2,7 @@
 
 HR Analytics + quy trình **Talent Acquisition đầu–cuối** cho tập đoàn giả định *Aurora Meridian Group Việt Nam (AMG)*, dữ liệu mô phỏng 11/2026.
 
-- **Ứng dụng:** https://levitri2711-glitch.github.io/hr-talent-studio/
+- **Ứng dụng:** https://levitri2711-glitch.github.io/hr-analytics/
 - **Chi phí:** 0 đ, hiện tại và về sau: GitHub Pages + Google Apps Script + Google Sheets + Gmail của Owner. Không có thư viện, phông chữ, phân tích hay AI trả phí.
 
 ## Mô-đun tuyển dụng

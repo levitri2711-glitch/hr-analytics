@@ -194,5 +194,30 @@ body.focus .side{visibility:hidden;padding:0;border:0}
 .kv div:nth-child(odd){color:var(--muted)}
 .kv div:nth-child(even){font-family:var(--f-body);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 /* Liên kết sang Sale Analytics (cùng tập đoàn AMG) */
-.side .foot .peer{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:8px 10px;border:1px solid rgba(255,255,255,.12);border-radius:9px;color:var(--side-ink);text-decoration:none;font-weight:500;font-size:12.5px}
+.side .foot .peer{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;color:var(--side-ink);text-decoration:none;font-weight:500;font-size:12.5px}
 .side .foot .peer:hover{background:var(--side-hi)}
+
+/* ---------- bản sửa UX/UI 26/11 ---------- */
+/* thanh trên đặc, không lộ nội dung cuộn phía sau */
+.top{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}
+/* giới hạn bề rộng đọc trên màn hình lớn */
+#banner,#view{max-width:1560px;margin-inline:auto}
+.top{max-width:none}
+/* một phông duy nhất, số căn cột bằng tabular-nums */
+.num,.mono,td.n,th.n,.kpi .v,.bar .vl,.kv div,.life .st b,kbd,#ttimer{font-family:var(--f-body);font-variant-numeric:tabular-nums}
+svg .tick{font-family:var(--f-body)}
+.tbl td.n{letter-spacing:-.005em}
+/* bảng: chữ ngắn không xuống dòng từng từ; chữ dài có độ rộng tối thiểu */
+.tbl td.nw,.tbl th{white-space:nowrap}
+.tbl td.wr{min-width:16em}
+.tbl td{line-height:1.45}
+.tw{max-width:100%}
+.panel>header .sub{min-width:0}
+/* văn bản dài trong panel dễ đọc */
+.panel p{max-width:80ch}
+/* thẻ tự động: nút luôn nằm đáy */
+.auto .card .btn{align-self:flex-start}
+/* banner gọn */
+#banner .banner+.banner{margin-top:-6px}
+.bar .fl{display:block}
+.bar .tr{display:block}
